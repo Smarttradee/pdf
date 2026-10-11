@@ -33,7 +33,7 @@ window.COURSE_CONFIG = {
      cannot produce a signed callback, so orders paid this way are verified by
      you in the Razorpay dashboard and released through the support flow.
      See README.md → "Payment Link fallback".                            */
-  paymentLinkUrl: 'https://rzp.io/rzp/30cJdSU',
+  paymentLinkUrl: 'https://rzp.io/rzp/lvZ5GZ4R',
   enablePaymentLinkFallback: true,
 
   /* ---- Course facts ----------------------------------------------------- */
