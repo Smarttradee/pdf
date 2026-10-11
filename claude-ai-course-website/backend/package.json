@@ -1,0 +1,31 @@
+{
+  "name": "claude-ai-course-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cloudflare Worker API for the Claude AI Video Editing Course: Razorpay order creation + verification, Razorpay webhooks, single-use expiring PDF download tokens, private R2 storage and transactional email delivery.",
+  "type": "module",
+  "main": "src/index.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail",
+    "db:create": "wrangler d1 create claude_course_db",
+    "db:migrate": "wrangler d1 execute claude_course_db --remote --file=./schema.sql",
+    "db:migrate:local": "wrangler d1 execute claude_course_db --local --file=./schema.sql",
+    "secrets": "echo 'Run: wrangler secret put RAZORPAY_KEY_ID   (repeat for each secret in .dev.vars.example)'",
+    "check": "node --check src/index.js && node --check src/razorpay.js && node --check src/email.js && node --check src/storage.js && node --check src/security.js"
+  },
+  "devDependencies": {
+    "wrangler": "^3.99.0"
+  },
+  "dependencies": {},
+  "cloudflare": {
+    "bindings": {
+      "DB": "D1 database (orders, tokens, webhook_events, rate_limits)",
+      "PDF_BUCKET": "Private R2 bucket holding the course PDF"
+    }
+  }
+}

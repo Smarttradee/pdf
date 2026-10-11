@@ -1,0 +1,77 @@
+# ==========================================================================
+# backend/wrangler.toml — Cloudflare Worker configuration
+# --------------------------------------------------------------------------
+# PUBLIC configuration only. Real secrets are NEVER written here.
+# They are uploaded with `wrangler secret put NAME` (see ./README.md).
+#
+# Before deploying, replace every <...> placeholder:
+#   <your-subdomain>          your Cloudflare workers.dev subdomain
+#   <your-d1-database-id>     from `npm run db:create`
+#   https://example.com       your real custom domain
+# ==========================================================================
+
+name = "claude-course-api"
+main = "src/index.js"
+compatibility_date = "2026-01-01"
+
+# --------------------------------------------------------------------------
+# Non-secret variables. Safe to commit — none of these is a credential.
+# --------------------------------------------------------------------------
+[vars]
+# Where your GitHub Pages site lives (used to build the links in emails).
+PUBLIC_SITE_URL = "https://example.com"
+
+# Comma-separated list of exact origins allowed to call this API.
+ALLOWED_ORIGINS = "https://example.com,https://www.example.com,http://localhost:8000,http://127.0.0.1:8000"
+
+# The price is fixed here on the server: ₹1,449 = 144900 paise.
+# The browser can never change it.
+EXPECTED_AMOUNT = "144900"
+EXPECTED_CURRENCY = "INR"
+
+# Your private R2 object key and the filename the customer downloads.
+PDF_OBJECT_KEY = "private/claude-ai-video-editing-course.pdf"
+PDF_FILENAME = "Claude-AI-Video-Editing-Course.pdf"
+
+# Support + sender identity.
+SUPPORT_EMAIL = "support@example.com"
+BRAND_NAME = "Claude AI Video Editing Course"
+# Must be an address on a domain you have verified in Resend.
+EMAIL_FROM = "Claude AI Course <no-reply@example.com>"
+
+# Token lifetimes.
+# TOKEN_TTL_MINUTES     → browser session download token
+# DOWNLOAD_LINK_TTL_HOURS → emailed link + its token
+TOKEN_TTL_MINUTES = "60"
+DOWNLOAD_LINK_TTL_HOURS = "24"
+
+# --------------------------------------------------------------------------
+# Bindings
+# --------------------------------------------------------------------------
+# Orders, download tokens, webhook idempotency, rate limiting.
+[[d1_databases]]
+binding = "DB"
+database_name = "claude_course_db"
+database_id = "<your-d1-database-id>"
+
+# PRIVATE bucket for the course PDF. Do NOT enable public access on it
+# (no r2.dev public URL, no public custom domain, no public bucket policy).
+[[r2_buckets]]
+binding = "PDF_BUCKET"
+bucket_name = "claude-course-private"
+
+# --------------------------------------------------------------------------
+# Observability: gives you `wrangler tail` logs in the dashboard.
+# --------------------------------------------------------------------------
+[observability]
+enabled = true
+
+# --------------------------------------------------------------------------
+# OPTIONAL — attach your own API subdomain to the Worker, e.g.
+#   https://api.yourdomain.com/api/create-order
+# Enable this only if your domain's DNS is already managed by Cloudflare.
+#
+# [[routes]]
+# pattern = "api.example.com"
+# custom_domain = true
+# --------------------------------------------------------------------------

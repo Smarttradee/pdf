@@ -1,0 +1,12 @@
+# robots.txt — Claude AI Video Editing Course
+# Replace https://example.com with your real custom domain after deployment.
+
+User-agent: *
+Allow: /
+Disallow: /pages/payment-pending.html
+Disallow: /pages/payment-failed.html
+Disallow: /pages/success.html
+Disallow: /backend/
+
+# No sitemap line until your real domain is live (sitemap.xml uses a placeholder).
+Sitemap: https://example.com/sitemap.xml
